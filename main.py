@@ -12,14 +12,14 @@ mp_pose = mp.solutions.pose
 pose_video = mp_pose.Pose(static_image_mode=False, min_detection_confidence=0.5, model_complexity=1)
 
 # Initialize the VideoCapture object to read from the webcam.
-video = cv2.VideoCapture(1)
+#video = cv2.VideoCapture(0)
 
 # Create named window for resizing purposes
 cv2.namedWindow('Pose Detection', cv2.WINDOW_NORMAL)
 
 
 # Initialize the VideoCapture object to read from a video stored in the disk.
-#video = cv2.VideoCapture('media/running.mp4')
+video = cv2.VideoCapture('media/running.mp4')
 
 # Set video camera size
 video.set(3,1280)

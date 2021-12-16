@@ -25,6 +25,7 @@ def landmarkFiltering(landmarks, output_image, display=False):
     label1 = int(label1/5.6)
     label2 = int(label2/4.5)
 
+    # messy
     mixer.init()
     label_name = str(label1).rjust(3, str(0))
     if('000' == label_name):

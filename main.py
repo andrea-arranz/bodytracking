@@ -33,6 +33,7 @@ while video.isOpened():
     frame, landmarks = detectPose(frame, pose_video, display=False)
     
     if landmarks:
+        mixer.init()
         frame = landmarkFiltering(landmarks, frame, display=True)
 
     cv2.imshow('Bodytracking', frame)

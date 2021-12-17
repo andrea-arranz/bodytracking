@@ -30,7 +30,10 @@ def landmarkFiltering(landmarks, output_image, display=False):
 
     getNote(note_angle, octave_angle)
     
-    cv2.putText(output_image, 'Note angle: {}'.format(note_angle), (10, 30),cv2.FONT_HERSHEY_PLAIN, 2, (0, 0, 0), 3)
+
+    x1, x2, _ = landmarks[mp_pose.PoseLandmark.RIGHT_ELBOW.value]
+
+    cv2.putText(output_image, 'Note angle: {}'.format(note_angle), (x1, x2),cv2.FONT_HERSHEY_PLAIN, 2, (0, 0, 0), 3)
     cv2.putText(output_image, 'Octave angle: {}'.format(octave_angle), (10, 50),cv2.FONT_HERSHEY_PLAIN, 2, (0, 0, 0), 3)
 
     return output_image

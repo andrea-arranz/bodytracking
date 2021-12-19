@@ -15,7 +15,8 @@ video = cv2.VideoCapture(0)
 cv2.namedWindow('Bodytracking', cv2.WINDOW_NORMAL)
 video.set(3,1280)
 video.set(4,960)
-
+frame_counter = 0
+play_sound = False
 while video.isOpened():
     
     ok, frame = video.read()
@@ -34,15 +35,20 @@ while video.isOpened():
     
     if landmarks:
         mixer.init()
-        frame = landmarkFiltering(landmarks, frame, display=True)
+        frame = landmarkFiltering(landmarks, frame, frame_counter, play_sound)
 
     cv2.imshow('Bodytracking', frame)
 
-
+    frame_counter = frame_counter + 1
 
     k = cv2.waitKey(1) & 0xFF
     if(k == 27):
         break
+    if(k == 32):
+        if (play_sound == False):
+            play_sound = True
+        else:
+            play_sound = False
 
 video.release()
 cv2.destroyAllWindows()

@@ -10,7 +10,7 @@ import time
 mp_pose = mp.solutions.pose
 
 
-def landmarkFiltering(landmarks, output_image, display=False):
+def landmarkFiltering(landmarks, output_image, frame_counter, play_sound):
     
     # right_elbow
     # right_shoulder
@@ -27,8 +27,9 @@ def landmarkFiltering(landmarks, output_image, display=False):
     # c d e f g a b
     note_angle = int(label1)
     octave_angle = int(label2)
-
-    getNote(note_angle, octave_angle)
+    if play_sound:
+        if (frame_counter % 3 == 0):
+            getNote(note_angle, octave_angle)
     
 
     x1, x2, _ = landmarks[mp_pose.PoseLandmark.RIGHT_ELBOW.value]

@@ -22,6 +22,7 @@ def landmarkFiltering(landmarks, output_image, frame_counter, play_sound):
     label2 = int(calcAngle(landmarks[mp_pose.PoseLandmark.LEFT_ELBOW.value],
                            landmarks[mp_pose.PoseLandmark.LEFT_SHOULDER.value],
                            landmarks[mp_pose.PoseLandmark.LEFT_HIP.value]))
+    
 
     # 7 notes 3 octaves
     # c d e f g a b
@@ -29,32 +30,33 @@ def landmarkFiltering(landmarks, output_image, frame_counter, play_sound):
     octave_angle = int(label2)
     if play_sound:
         if (frame_counter % 3 == 0):
-            getNote(note_angle, octave_angle)
+            getNote(note_angle, octave_angle, landmarks)
+            print(str(landmarks[mp_pose.PoseLandmark.RIGHT_SHOULDER.value]))
     
 
     x1, x2, _ = landmarks[mp_pose.PoseLandmark.RIGHT_ELBOW.value]
 
-    cv2.putText(output_image, 'Note angle: {}'.format(note_angle), (x1, x2),cv2.FONT_HERSHEY_PLAIN, 2, (0, 0, 0), 3)
+    cv2.putText(output_image, 'Note angle: {}'.format(note_angle), (10, 30),cv2.FONT_HERSHEY_PLAIN, 2, (0, 0, 0), 3)
     cv2.putText(output_image, 'Octave angle: {}'.format(octave_angle), (10, 50),cv2.FONT_HERSHEY_PLAIN, 2, (0, 0, 0), 3)
 
     return output_image
  
 
-def getNote(note_angle, octave_angle):
+def getNote(note_angle, octave_angle, landmarks):
     if 0 <= note_angle <= 50:
-        playNote('C', getOctave(octave_angle))
+        playNote('C', getOctave(octave_angle), landmarks)
     elif 51 <= note_angle <= 100:
-        playNote('D', getOctave(octave_angle))
+        playNote('D', getOctave(octave_angle), landmarks)
     elif 101 <= note_angle <= 150:
-        playNote('E', getOctave(octave_angle))
+        playNote('E', getOctave(octave_angle), landmarks)
     elif 151 <= note_angle <= 200:
-        playNote('F', getOctave(octave_angle))
+        playNote('F', getOctave(octave_angle), landmarks)
     elif 201 <= note_angle <= 250:
-        playNote('G', getOctave(octave_angle))
+        playNote('G', getOctave(octave_angle), landmarks)
     elif 251 <= note_angle <= 300:
-        playNote('A', getOctave(octave_angle))
+        playNote('A', getOctave(octave_angle), landmarks)
     elif 301 <= note_angle <= 360:
-        playNote('B', getOctave(octave_angle))
+        playNote('B', getOctave(octave_angle), landmarks)
 
 
 def getOctave(angle):
@@ -67,9 +69,21 @@ def getOctave(angle):
     else:
         return '3'
 
-def playNote(note, octave):
-    mixer.music.load('piano-mp3/{}{}.mp3'.format(note, octave))
-    mixer.music.play()
+def playNote(note, octave, landmarks):
+
+    # 1 to 640 pixels to normalize for volume
+    _, volume, _ = landmarks[mp_pose.PoseLandmark.RIGHT_ELBOW.value]
+    if (volume <= 0):
+        volume = 1
+    elif (volume >= 640):
+        volume = 640
+    volume = volume / 640
+
+    volume = abs(1 - volume)
+    note = mixer.Sound('piano-mp3/{}{}.mp3'.format(note, octave))
+    note.set_volume(volume)
+    print(str(note.get_volume()))
+    note.play()
 
 def old(label1, label2):
 
